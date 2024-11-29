@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Analysis Application</title>
+</head>
+<body>
+    <h1>Text Analysis Application</h1>
+    <form id="analysisForm">
+        <textarea id="sentence" name="sentence" placeholder=" type text here..." rows="4" cols="50"></textarea><br><br>
+        <button type="button" onclick="analyze('morphological')">Morphological Analysis</button>
+        <button type="button" onclick="analyze('syntactic')">Syntactic Analysis</button>
+        <button type="button" onclick="analyze('semantic')">Semantic Analysis</button>
+        <button type="button" onclick="analyze('pragmatic')">Pragmatic Analysis</button>
+    </form>
+    <h2>Result:</h2>
+    <div id="result">No results yet.</div>
+    <script>
+        async function analyze(type) {
+            const text = document.getElementById("sentence").value;
+            const response = await fetch("/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text, type })
+            });
+            const data = await response.json();
+            document.getElementById("result").innerText = data.result || data.error;
+        }
+    </script>
+</body>
+</html>
